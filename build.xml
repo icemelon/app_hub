@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="hub" default="genjar" basedir=".">
+  <description>
+    Modify the app to use API provided by SensorHubManager.
+  </description>
+
+  <property name="src" location="src"/>
+  <property name="libs" location="libs"/>
+  <property name="build" location="classes"/>
+  <property name="jar_name" value="hub.jar"/>
+
+  <path id="lib_classpath">
+    <fileset dir="${libs}">
+	  <include name="*.jar"/>
+	</fileset>
+  </path>
+
+  <target name="init">
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init" description="compile the source">
+    <javac srcdir="${src}" destdir="${build}" debug="true" includeantruntime="true">
+	  <classpath refid="lib_classpath" />
+	</javac>
+  </target>
+
+  <target name="genjar" depends="compile" description="generate the jar">
+    <jar destfile="${jar_name}" basedir="${build}">
+	  <zipfileset src="${libs}/soot-trunk.jar"/>
+	  <manifest>
+	    <attribute name="Main-Class" value="main.Main"/>
+	  </manifest>
+	</jar>
+  </target>
+  
+  <target name="clean">
+    <delete dir="${build}"/>
+	<delete dir="${jar}"/>
+  </target>
+</project>
