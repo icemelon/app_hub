@@ -9,10 +9,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Option {
-//	private static boolean
 	
 	private static String apk = null;
 	private static String output_dir = "output";
+	private static int bufferNum = -1;
 	
 	public static String getApk() {
 		return apk;
@@ -20,6 +20,10 @@ public class Option {
 	
 	public static String getOutputDir() {
 		return output_dir;
+	}
+	
+	public static int getBufferNum() {
+		return bufferNum;
 	}
 	
 	public static void clearDirectory(String directory) {
@@ -35,7 +39,8 @@ public class Option {
 	public static void usage() {
 		System.out.println("\nGeneral Options:");
 		System.out.println("  -h -help\t\t\tDisplay help and exit");
-		System.out.println("  -apk\t\t\t\tInput the apk file");
+		System.out.println("  -apk\t\t\t\tInput the apk file (Required)");
+		System.out.println("  -n -num\t\t\tInput the number to buffer (Required)");
 		System.out.println("  -d DIR -output-dir DIR\tStore output files in DIR (default: output)");
 		System.out.println("  -log\t\t\tTurn on the log (default: on)");
 		System.out.println("  -log-out std/FILE\t\tDesignate the file to dump the log");
@@ -64,6 +69,10 @@ public class Option {
 				while (output_dir.endsWith("/")) {
 					output_dir = output_dir.substring(0, output_dir.length() - 1);
 				}
+			} else if (arg.equals("n") || arg.equals("num")) {
+				if (!it.hasNext())
+					return false;
+				bufferNum = Integer.parseInt(it.next());
 			} else if (arg.equals("log")) {
 				Log.setDebug(true);
 			} else if (arg.equals("log-out")) {
@@ -84,6 +93,9 @@ public class Option {
 		}
 		
 		if (apk == null)
+			return false;
+		
+		if (bufferNum < 0)
 			return false;
 		
 		return true;
